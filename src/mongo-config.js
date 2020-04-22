@@ -1,12 +1,28 @@
-const dbOptions = {
+const path = require('path');
+
+const dbBackupOptions = {
     host: 'localhost',
     port: 27017,
-    database: '<database_name>',
+    database: 'ems_db',
     autoBackup: true,
     removeOldBackup: true,
     keepLastDaysBackup: 1,
-    autoBackupPath: '<backup path>',
-    logFilePath: '<logfile path>'
+    autoBackupPath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup'),
+    logFilePath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup')
 };
 
-module.exports = { dbOptions };
+// database connection string
+const database = {
+    url: 'mongodb://127.0.0.1:27017/',
+    name: ['ems_db_dev', 'ems_db_test']
+}
+
+const dbRestoreOptions = {
+    host: 'localhost',
+    port: 27017,
+    sourcePath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup'),
+    logFilePath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup'),
+    drop: true
+}
+
+module.exports = { dbBackupOptions, database, dbRestoreOptions };

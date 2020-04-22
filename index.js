@@ -10,3 +10,9 @@ var auto_bot = schedule.scheduleJob(rule, function () {
     const backup = require('./src/backup');
     backup.dbAutoBackUp();
 });
+
+// const backup = require('./src/backup');
+// backup.dbAutoBackUp();
+
+// const x = require('./src/db-restore');
+// x.dbRestore();
