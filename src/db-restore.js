@@ -21,7 +21,7 @@ async function dropDatabase() {
     } catch (error) {
         console.error(error);
     }
-}
+};
 
 // FUNCTION WHICH RESTORE DATABASE
 async function dbRestore() {
@@ -43,6 +43,6 @@ async function dbRestore() {
     } catch (error) {
         console.error(error);
     }
-}
+};
 
-module.exports = { dropDatabase, dbRestore }
+module.exports = { dropDatabase, dbRestore };

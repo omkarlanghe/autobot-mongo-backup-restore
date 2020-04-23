@@ -63,6 +63,6 @@ function dbAutoBackUp() {
     } catch (error) {
         console.error(error);
     }
-}
+};
 
-module.exports = { dbAutoBackUp }
+module.exports = { dbAutoBackUp };

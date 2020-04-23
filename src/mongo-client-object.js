@@ -35,4 +35,4 @@ function getMongoClient(p_database) {
 module.exports.dbClient = async () => {
     let database = await getMongoClient(database_name);
     return database;
-}
+};
