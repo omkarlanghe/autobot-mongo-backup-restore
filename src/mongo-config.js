@@ -7,6 +7,7 @@ const dbBackupOptions = {
     autoBackup: true,
     removeOldBackup: true,
     keepLastDaysBackup: 1,
+    logFileName: 'backup-logs.txt',
     autoBackupPath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup'),
     logFilePath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup')
 };
@@ -20,6 +21,7 @@ const database = {
 const dbRestoreOptions = {
     host: 'localhost',
     port: 27017,
+    logFileName: 'restore-logs.txt',
     sourcePath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup'),
     logFilePath: path.resolve('/EMS/Version-3/New_Repos/autobot-mongo-backup-restore/backup'),
     drop: true
