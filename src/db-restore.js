@@ -9,8 +9,8 @@ async function dropDatabase() {
         let isDropped = false;
         for (let i = 0; i < mongo_config.database.name.length; i++) {
             let mongo_client = await mongo_util.dbClient(mongo_config.database.name[i]);
-            isDropped = await mongo_client.dropDatabase();
-            await mongo_client.close();
+            isDropped = await mongo_client.db.dropDatabase();
+            await mongo_client.client.close();
         }
         return(isDropped);
     } catch (error) {

@@ -47,7 +47,7 @@ let auto_bot_coll_restore = schedule.scheduleJob(coll_restore_rule, async () => 
 });
 
 // TEST CODE
-// const backup = require('./src/backup');
+// const backup = require('./src/db-backup');
 // backup.dbAutoBackUp();
 // const x = require('./src/db-restore');
 // x.dbRestore();

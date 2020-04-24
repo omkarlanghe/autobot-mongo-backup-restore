@@ -13,6 +13,7 @@ async function getMongoClient(p_database) {
         delete mongo_client; //remove reference of the object
         mongo_client = undefined; //make it undefined to create another instance
         if (!mongo_client) {
+            mongo_client = { db: null, client: null };
             return new Promise((resolve, reject) => {
                 mongo.connect(mongo_url, {
                     useNewUrlParser: true,
@@ -25,7 +26,8 @@ async function getMongoClient(p_database) {
                     if (err) {
                         return reject(err);
                     }
-                    mongo_client = client.db(p_database);
+                    mongo_client.db = client.db(p_database);
+                    mongo_client.client = client;
                     resolve(mongo_client);
                 });
             });
@@ -34,6 +36,7 @@ async function getMongoClient(p_database) {
         }
     } else {
         if (!mongo_client) {
+            mongo_client = { db: null, client: null };
             return new Promise((resolve, reject) => {
                 mongo.connect(mongo_url, {
                     useNewUrlParser: true,
@@ -46,7 +49,8 @@ async function getMongoClient(p_database) {
                     if (err) {
                         return reject(err);
                     }
-                    mongo_client = client.db(p_database);
+                    mongo_client.db = client.db(p_database);
+                    mongo_client.client = client;
                     resolve(mongo_client);
                 });
             });

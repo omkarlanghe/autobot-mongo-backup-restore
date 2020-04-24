@@ -14,13 +14,13 @@ async function dropCollections() {
                 let mongo_client = await mongo_util.dbClient(name);
                 for await (const coll_name of mongo_config.collectionRestoreOptions.collections) {
                     try {
-                        let x = await mongo_client.collection(coll_name).drop();
+                        let x = await mongo_client.db.collection(coll_name).drop();
                         if (x) { dropped_collection_stats.push({ db: name, collection: coll_name, drop_status: true }); }
                     } catch (error) {
 
                     }
                 }
-                await mongo_client.close();
+                await mongo_client.client.close();
             } catch (error) {
                 console.error(error);
             }
