@@ -6,18 +6,13 @@ const fs = require('fs');
 // FUNCTION TO DROP ALL PREVIOUSLY RESTORED DATABASE BEFORE RESTORING AGAIN
 async function dropDatabase() {
     try {
-        let mongo_client = await mongo_util.dbClient();
         let isDropped = false;
-
-        return (new Promise(async (resolve) => {
-            for await (const name of mongo_config.database.name) {
-                mongo_client.s.databaseName = name;
-                isDropped = await mongo_client.dropDatabase();
-            }
-            resolve(isDropped);
-        }).catch(reject => {
-            reject(false);
-        }));
+        for (let i = 0; i < mongo_config.database.name.length; i++) {
+            let mongo_client = await mongo_util.dbClient(mongo_config.database.name[i]);
+            isDropped = await mongo_client.dropDatabase();
+            await mongo_client.close();
+        }
+        return(isDropped);
     } catch (error) {
         console.error(error);
     }
@@ -33,7 +28,7 @@ async function dbRestore() {
                 for await (const destination_database of mongo_config.database.name) {
                     let cmd = `mongorestore.exe --host ${mongo_config.dbRestoreOptions.host} --port ${mongo_config.dbRestoreOptions.port} --db ${destination_database}  ${mongo_config.dbRestoreOptions.sourcePath}\\dump\\${mongo_config.dbBackupOptions.database}`;
                     exec(cmd, async (error, stdout, stderr) => {
-                        for await(const chunks of stderr) {
+                        for await (const chunks of stderr) {
                             writeable_stream.write(chunks);
                         }
                     });

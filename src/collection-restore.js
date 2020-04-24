@@ -8,21 +8,19 @@ const exec = require('child_process').exec;
  */
 async function dropCollections() {
     try {
-        let mongo_client = await mongo_util.dbClient();
-        var dropped_collection_stats = [];
+        let dropped_collection_stats = [];
         for await (const name of mongo_config.collectionRestoreOptions.database) {
             try {
-                mongo_client.s.databaseName = name;
+                let mongo_client = await mongo_util.dbClient(name);
                 for await (const coll_name of mongo_config.collectionRestoreOptions.collections) {
                     try {
                         let x = await mongo_client.collection(coll_name).drop();
-                        if (x) {
-                            dropped_collection_stats.push({ db: name, collection: coll_name, drop_status: true });
-                        }
+                        if (x) { dropped_collection_stats.push({ db: name, collection: coll_name, drop_status: true }); }
                     } catch (error) {
 
                     }
                 }
+                await mongo_client.close();
             } catch (error) {
                 console.error(error);
             }
@@ -38,15 +36,15 @@ async function dropCollections() {
  */
 async function collectionRestore() {
     try {
-        if(mongo_config.collectionRestoreOptions.drop === true) {
+        if (mongo_config.collectionRestoreOptions.drop === true) {
             let result = await dropCollections();
-            if(result.length != 0) {
-                for await(const dbName of mongo_config.collectionRestoreOptions.database) {
+            if (result.length != 0) {
+                for await (const dbName of mongo_config.collectionRestoreOptions.database) {
                     let writeable_stream = fs.createWriteStream(`${mongo_config.collectionRestoreOptions.logFilePath}\\${mongo_config.collectionRestoreOptions.logFileName}`).setDefaultEncoding('utf8');
-                    for await(const index of result) {
+                    for await (const index of result) {
                         let cmd = `mongorestore.exe --db ${dbName} ${mongo_config.collectionRestoreOptions.sourcePath}\\dump\\${mongo_config.dbBackupOptions.database}\\${index.collection}.bson`;
                         exec(cmd, async (error, stdout, stderr) => {
-                            for await(const chunks of stderr) {
+                            for await (const chunks of stderr) {
                                 writeable_stream.write(chunks);
                             }
                         });
